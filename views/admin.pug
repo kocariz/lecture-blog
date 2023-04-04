@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    .container
+        .row 
+            .col-sm-2
+                .pl-5.pt-5
+                    ul.sidebar-nav.list-unstyled
+                        li
+                          a(href='/admin/info/posts') All Posts
+                        li
+                          a(href='/admin/info/comments') All Comments
+            .col-sm-10
+                .pt-5
+                    h3 Welcome #{user.username}
+
+                    if error
+                       h4 Error getting dynamic content.
+                    else
+                        h4 You have created:
+
+                    ul.list-unstyled
+                        li #[strong Posts:] !{data.post_count}
+                        li #[strong Comments:] !{data.comments_count}
