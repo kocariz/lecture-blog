@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  body
+    .container
+        if post_list !== undefined
+            each post in post_list
+                .row.mt-3
+                    .col
+                        .card.mb-3(style='max-height: 25vh;')
+                          .row.g-0
+                            .col-md-8
+                              .card-body
+                                h5.card-title #{post.title}
+                                p.card-text #{post.mainText.slice(0, 250) + ' ...'}
+                                p.card-text
+                                  small.text-body-secondary #{post.publishDate_formatted}
+                                .row
+                                  .col-3
+                                    a.btn.btn-info.m-2(href=('/post/update-post/' + post.id)) Edit post
+                                  .col-3
+                                    form(method='POST' action='/post/delete-post/' + post._id)
+                                      button.btn.btn.btn-danger.m-2(type='submit') Delete post
+                            .col-md-4
+                              img.img-fluid.rounded-start(src=(post.img) alt=(post.img_title) style='object-fit: cover; height: 25vh; max-height: 25vh; width: 100%;')
+            else
+                .row.mt-3
+                    .col
+                        p No blog posts
+        else
+            .row.mt-3
+                .col
+                    p No blog posts

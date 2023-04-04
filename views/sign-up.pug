@@ -1,0 +1,43 @@
+doctype html
+head
+  meta(charset='utf-8')
+  meta(name='viewport' content='width=device-width, initial-scale=1')
+  meta(name='description' content='')
+  meta(name='author' content='Mark Otto, Jacob Thornton, and Bootstrap contributors')
+  meta(name='generator' content='Hugo 0.111.3')
+  title Sign Up
+  link(href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp' crossorigin='anonymous')
+  // Custom styles for this template
+  link(href='/stylesheets/sign-in-up.css' rel='stylesheet')
+main.form-sign.w-100.m-auto
+  form(method='POST' action='')
+    img.mb-4(src='/images/person-reading-icon.png' alt='' width='130' height='100')
+    h1.h3.mb-3.fw-normal Create your account
+    .form-floating
+      input#username.form-control(type='text' name='username' placeholder='Username' value=(undefined===user ? '' : user.username))
+      label(for='username') Username
+    .form-floating
+      input#email.form-control(type='email' name='email' placeholder='name@example.com' value=(undefined===user ? '' : user.email))
+      label(for='email') Email address
+    .form-floating
+      input#confirmEmail.form-control(type='email' name='confirmEmail' placeholder='name@example.com')
+      label(for='confirmEmail') Confirm email address
+    .form-floating
+      input#password.form-control(type='password' name='password' placeholder='Password' value=(undefined===user ? '' : user.password))
+      label(for='password') Password
+    .form-floating
+      input#confirmPassword.form-control(type='password' name='confirmPassword' placeholder='Password')
+      label(for='confirmPassword')  Confirm Password
+    button.w-100.btn.btn-lg.btn-primary(type='submit') Create account
+    p.mb-5.pb-lg-2.mt-2
+      | Already have an account? 
+      a(href='/sign/sign-in' style='color: black;') Sign in here
+
+    if errors
+        ul
+          for error in errors
+            li!= error.msg
+
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js' integrity='sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N' crossorigin='anonymous')
+    script(src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js' integrity='sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3' crossorigin='anonymous')
+    script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.min.js' integrity='sha384-heAjqF+bCxXpCWLa6Zhcp4fu20XoNIA98ecBC1YkdXhszjoejr5y9Q77hIrv8R9i' crossorigin='anonymous')

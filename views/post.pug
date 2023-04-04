@@ -1,0 +1,40 @@
+extends layout
+
+block content
+    .container
+        .row
+          h2(style='padding: 10px;') #{post.title}
+        if post.subtitle != null
+          .row
+            h4(style='padding: 10px;') #{post.subtitle}
+        .row
+          p.mb-5.pb-lg-2
+            | #{post.publishDate_formatted} - By 
+            a(href='#!' style='color: black;') #{post.author.username}
+        div #{post.mainText}
+        figure.figure
+          img.figure-img.img-fluid.rounded(src=(post.img) alt=(post.img_title) style='max-width: \
+          40vw; max-height: 40vh;')
+          figcaption.figure-caption #{post.imgTitle}
+        hr
+        .row
+          h4 Comments
+          hr(style='width: 65vw; margin:0 auto;')
+          div
+            form(method='POST' action='/comment/create-comment/' + post._id)
+              .form-floating(style='margin: 10px;')
+                textarea#comment.form-control.form-control-sm(style='height: 100px;' name='comment' placeholder='Comment' required='')
+                label.form-label(for='comment') Comment
+              .row.justify-content-evenly
+                .col-4
+                  button.w-100.btn.btn-info(type='submit' style='margin: 10px;') Create comment
+          hr(style='width: 65vw; margin:0 auto;')
+          if comment_list !== undefined
+            each comment in comment_list
+              .row
+                p.mb-5.pb-lg-2
+                  | #{comment.publishDate_formatted} - By 
+                  a(href='#!' style='color: black;') #{comment.author.username}
+                  br
+                  | #{comment.comment}
+              hr(style='width: 65vw; margin:0 auto;')

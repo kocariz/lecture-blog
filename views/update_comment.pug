@@ -1,0 +1,15 @@
+extends layout 
+
+block content 
+    .container
+        form(method='POST' action='/comment/update-comment/' + comment._id)
+          .form-floating(style='margin: 10px;')
+            textarea#comment.form-control.form-control-sm(style='height: 100px;' name='comment' placeholder='Comment' required='') #{comment.comment}
+            label.form-label(for='comment') Comment
+          .row.justify-content-evenly
+            .col-4
+              button.w-100.btn.btn-info(type='submit' style='margin: 10px;') Update comment
+        if errors
+          ul
+            for error in errors
+              li!= error.msg
