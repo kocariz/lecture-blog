@@ -156,6 +156,7 @@ exports.create_post_post = [
 
 exports.post_detail = (req, res, next) => {
     if(req.cookies.user !== null) {
+        console.log("Test");
         async.parallel(
             {
                 user(callback) {
@@ -194,6 +195,7 @@ exports.post_detail = (req, res, next) => {
             }
         )
     } else {
+        console.log("Test 2");
         async.parallel(
             {
                 post(callback) {
