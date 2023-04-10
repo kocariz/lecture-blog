@@ -156,7 +156,7 @@ exports.create_post_post = [
 
 exports.post_detail = (req, res, next) => {
     console.log(req.cookies.user);
-    if(req.cookies.user !== null) {
+    if(req.cookies.user !== undefined) {
         console.log("Test");
         async.parallel(
             {
