@@ -146,7 +146,7 @@ exports.create_post_post = [
                 post.save((err) => {
                   if (err)
                     next(err);
-                  res.redirect('/');
+                  res.redirect('/sign/sign-in');
                   return;
                 })
                 }
@@ -155,9 +155,7 @@ exports.create_post_post = [
 ];
 
 exports.post_detail = (req, res, next) => {
-    console.log(req.cookies.user);
     if(req.cookies.user !== undefined) {
-        console.log("Test");
         async.parallel(
             {
                 user(callback) {
@@ -196,7 +194,6 @@ exports.post_detail = (req, res, next) => {
             }
         )
     } else {
-        console.log("Test 2");
         async.parallel(
             {
                 post(callback) {

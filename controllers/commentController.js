@@ -13,63 +13,68 @@ exports.create_comment_post = [
       .trim(),
     // Process request after validation and sanitization.
     (req, res, next) => {
-        // Extract the validation errors from a request.
-        async.parallel(
-            {
-              user(callback) {
-                User.findById(JsonWebToken.verify(req.cookies.user, SECRET_JWT_CODE).id).exec(callback);
-              },
-              post(callback) {
-                Post.findById(req.params.id)
-                .populate('author')
-                .exec(callback);
-              },
-            },
-            (err, results, next) => {
-                if (err) {
-                  // Error in API usage.
-                  return next(err);
-                }
-                if (results.user == null) {
-                  // No results.
-                  res.redirect('/');
-                  return;
-                }
-                let date_ob = new Date();
-                let date = ("0" + date_ob.getDate()).slice(-2);
-                // current month
-                let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);           
-                // current year
-                let year = date_ob.getFullYear();
-                const comment = new Comment({
-                    comment: req.body.comment,
-                    author: results.user,
-                    post: results.post,
-                    publishDate: year + "-" + month + "-" + date,
-                });
-                comment.save((err) => {
-                    if (err)
-                      next(err);
-                    async.parallel(
-                    {
-                        comment(callback) {
-                            Comment.find({ post: req.params.id })
-                            .populate('author')
-                            .sort([["publishDate", "descending"]])
-                            .exec(callback);
-                        }
+        if(req.cookies.user !== undefined) {
+            // Extract the validation errors from a request.
+            async.parallel(
+                {
+                    user(callback) {
+                        User.findById(JsonWebToken.verify(req.cookies.user, SECRET_JWT_CODE).id).exec(callback);
                     },
-                    (err, results_two, next) => {
-                        res.render("post", {
-                            post: results.post,
-                            user: results.user,
-                            comment_list: results_two.comment,
-                        });
+                    post(callback) {
+                        Post.findById(req.params.id)
+                            .populate('author')
+                            .exec(callback);
+                    },
+                },
+                (err, results, next) => {
+                    if (err) {
+                        // Error in API usage.
+                        return next(err);
+                    }
+                    if (results.user == null) {
+                        // No results.
+                        res.redirect('/');
                         return;
+                    }
+                    let date_ob = new Date();
+                    let date = ("0" + date_ob.getDate()).slice(-2);
+                    // current month
+                    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+                    // current year
+                    let year = date_ob.getFullYear();
+                    const comment = new Comment({
+                        comment: req.body.comment,
+                        author: results.user,
+                        post: results.post,
+                        publishDate: year + "-" + month + "-" + date,
                     });
-                })
-            }
-        );
+                    comment.save((err) => {
+                        if (err)
+                            next(err);
+                        async.parallel(
+                            {
+                                comment(callback) {
+                                    Comment.find({post: req.params.id})
+                                        .populate('author')
+                                        .sort([["publishDate", "descending"]])
+                                        .exec(callback);
+                                }
+                            },
+                            (err, results_two, next) => {
+                                res.render("post", {
+                                    post: results.post,
+                                    user: results.user,
+                                    comment_list: results_two.comment,
+                                });
+                                return;
+                            });
+                    })
+                }
+            );
+        } else {
+            res.redirect('/')
+            return;
+        }
     },
 ];
 
