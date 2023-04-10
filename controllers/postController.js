@@ -155,6 +155,7 @@ exports.create_post_post = [
 ];
 
 exports.post_detail = (req, res, next) => {
+    console.log(req.cookies);
   async.parallel(
     {
       user(callback) {
