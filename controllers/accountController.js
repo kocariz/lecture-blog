@@ -70,7 +70,7 @@ exports.accounts_comment_info = (req, res) => {
                 },
             },
             (err, results) => {
-                console.log(results.posts);
+                //console.log(results.posts);
               res.render("account_comments", {
                 error: err,
                 comment_list: results.comments,

@@ -11,7 +11,8 @@ block content
           p.mb-5.pb-lg-2
             | #{post.publishDate_formatted} - By 
             a(href='#!' style='color: black;') #{post.author.username}
-        div #{post.mainText}
+        div(style='border: 1px blue solid;')
+          p(style='white-space:pre;line-height: 1em;width: fit-content;background-color: #8ca0ff;word-wrap: break-word;width: 90vw;') #{post.mainText}
         figure.figure
           img.figure-img.img-fluid.rounded(src=(post.img) alt=(post.img_title) style='max-width: \
           40vw; max-height: 40vh;')

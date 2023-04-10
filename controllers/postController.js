@@ -98,7 +98,7 @@ exports.create_post_post = [
       .withMessage("Main text must be specified."),
     // Process request after validation and sanitization.
     (req, res, next) => {
-        console.log(req.file);
+        //console.log(req.file);
         // Extract the validation errors from a request.
         const errors = validationResult(req);
     
@@ -173,7 +173,7 @@ exports.post_detail = (req, res, next) => {
       }
     },
     (err, results) => {
-      console.log(req.params.id);
+      //console.log(req.params.id);
       if (err) {
         return next(err);
       }
@@ -184,6 +184,7 @@ exports.post_detail = (req, res, next) => {
         return next(err);
       }
       // Successful, so render.
+      //console.log(results.post);
       res.render("post", {
         post: results.post,
         user: results.user,
@@ -218,7 +219,7 @@ exports.delete_post = (req, res, next) => {
       })
       fs.unlink(results.post.img, (err) => {
         if (err) throw err;
-        console.log(results.post.img);
+        //console.log(results.post.img);
         Post.findByIdAndRemove(req.params.id, (err) => {
           if (err)
             return next(err);

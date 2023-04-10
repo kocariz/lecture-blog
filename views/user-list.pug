@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  body
+    .container
+        if user_list !== undefined
+            each user in user_list
+                .row.mt-3
+                    .col
+                        .card.mb-3(style='max-height: 25vh;')
+                          .row.g-0
+                            .col-md-8
+                              .card-body
+                                h5.card-title #{user.username}
+                                p.card-text #{user.email}
+                                if user.admin == true
+                                    p.card-text
+                                      small.text-body-secondary Admin
+                                .row
+                                  .col-3
+                                    a.btn.btn-info.m-2(href=('/user/update-user/' + user._id)) Edit user
+                                  .col-3
+                                    form(method='POST' action='/user/delete-user/' + user._id)
+                                      button.btn.btn.btn-danger.m-2(type='submit') Delete user
+            else
+                .row.mt-3
+                    .col
+                        p No users
+        else
+            .row.mt-3
+                .col
+                    p No users

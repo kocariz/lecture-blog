@@ -10,6 +10,10 @@ block content
                           a(href='/admin/info/posts') All Posts
                         li
                           a(href='/admin/info/comments') All Comments
+                        li
+                          a(href='/admin/info/users') All Users
+                        li
+                          a(href='/admin/info/latests-posts') Latest Posts
             .col-sm-10
                 .pt-5
                     h3 Welcome #{user.username}
@@ -22,3 +26,4 @@ block content
                     ul.list-unstyled
                         li #[strong Posts:] !{data.post_count}
                         li #[strong Comments:] !{data.comments_count}
+                        li #[strong Users:] !{data.users_count}

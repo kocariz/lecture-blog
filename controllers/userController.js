@@ -61,7 +61,7 @@ exports.user_signin_post = [
       });
       return;
     }
-    console.log(req.body);
+    //console.log(req.body);
     // Data from form is valid.
     async.parallel(
       {
@@ -72,7 +72,7 @@ exports.user_signin_post = [
       (err, results, next) => {
         if (err) {
           // Error in API usage.
-          console.log(err);
+          //console.log(err);
           return next(err);
         }
         if (results.user == null) {
