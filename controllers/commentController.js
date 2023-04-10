@@ -13,7 +13,9 @@ exports.create_comment_post = [
       .trim(),
     // Process request after validation and sanitization.
     (req, res, next) => {
-        if(req.cookies.user !== undefined) {
+        console.log(req.cookies.user);
+        if (req.cookies.user !== undefined) {
+            console.log("Test");
             // Extract the validation errors from a request.
             async.parallel(
                 {
@@ -72,7 +74,8 @@ exports.create_comment_post = [
                 }
             );
         } else {
-            res.redirect('/')
+            console.log("Test 2");
+            res.redirect('/');
             return;
         }
     },
