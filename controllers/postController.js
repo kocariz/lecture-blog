@@ -155,44 +155,80 @@ exports.create_post_post = [
 ];
 
 exports.post_detail = (req, res, next) => {
-    console.log(req.cookies);
-  async.parallel(
-    {
-      user(callback) {
-        User.findById(JsonWebToken.verify(req.cookies.user, SECRET_JWT_CODE).id).exec(callback);
-      },
-      post(callback) {
-        Post.findById(req.params.id)
-          .populate('author')
-          .exec(callback);
-      },
-      comment(callback) {
-        Comment.find({ post: req.params.id })
-        .populate('author')
-        .sort([["publishDate", "descending"]])
-        .exec(callback);
-      }
-    },
-    (err, results) => {
-      //console.log(req.params.id);
-      if (err) {
-        return next(err);
-      }
-      if (results.post == null) {
-        // No results.
-        const err = new Error("Post not found");
-        err.status = 404;
-        return next(err);
-      }
-      // Successful, so render.
-      //console.log(results.post);
-      res.render("post", {
-        post: results.post,
-        user: results.user,
-        comment_list: results.comment,
-      });
+    if(req.cookies.user !== null) {
+        async.parallel(
+            {
+                user(callback) {
+                    User.findById(JsonWebToken.verify(req.cookies.user, SECRET_JWT_CODE).id).exec(callback);
+                },
+                post(callback) {
+                    Post.findById(req.params.id)
+                        .populate('author')
+                        .exec(callback);
+                },
+                comment(callback) {
+                    Comment.find({post: req.params.id})
+                        .populate('author')
+                        .sort([["publishDate", "descending"]])
+                        .exec(callback);
+                }
+            },
+            (err, results) => {
+                //console.log(req.params.id);
+                if (err) {
+                    return next(err);
+                }
+                if (results.post == null) {
+                    // No results.
+                    const err = new Error("Post not found");
+                    err.status = 404;
+                    return next(err);
+                }
+                // Successful, so render.
+                //console.log(results.post);
+                res.render("post", {
+                    post: results.post,
+                    user: results.user,
+                    comment_list: results.comment,
+                });
+            }
+        )
+    } else {
+        async.parallel(
+            {
+                post(callback) {
+                    Post.findById(req.params.id)
+                        .populate('author')
+                        .exec(callback);
+                },
+                comment(callback) {
+                    Comment.find({post: req.params.id})
+                        .populate('author')
+                        .sort([["publishDate", "descending"]])
+                        .exec(callback);
+                }
+            },
+            (err, results) => {
+                //console.log(req.params.id);
+                if (err) {
+                    return next(err);
+                }
+                if (results.post == null) {
+                    // No results.
+                    const err = new Error("Post not found");
+                    err.status = 404;
+                    return next(err);
+                }
+                // Successful, so render.
+                //console.log(results.post);
+                res.render("post", {
+                    post: results.post,
+                    user: undefined,
+                    comment_list: results.comment,
+                });
+            }
+        )
     }
-  )
 }
 
 exports.delete_post = (req, res, next) => {
