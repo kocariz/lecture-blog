@@ -254,7 +254,12 @@ exports.delete_post = (req, res, next) => {
             return next(err);
         })
       })
-      fs.unlink(results.post.img, (err) => {
+        Post.findByIdAndRemove(req.params.id, (err) => {
+            if (err)
+                return next(err);
+            res.redirect('/account/info/posts');
+        })
+      /*fs.unlink(results.post.img, (err) => {
         if (err) throw err;
         //console.log(results.post.img);
         Post.findByIdAndRemove(req.params.id, (err) => {
@@ -262,7 +267,7 @@ exports.delete_post = (req, res, next) => {
             return next(err);
           res.redirect('/account/info/posts');
         })
-      });
+      });*/
     }
   );
 };
