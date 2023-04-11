@@ -146,7 +146,7 @@ exports.create_post_post = [
                 post.save((err) => {
                   if (err)
                     next(err);
-                  res.redirect('/sign/sign-in');
+                  res.redirect('/');
                   return;
                 })
                 }
