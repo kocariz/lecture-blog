@@ -11,8 +11,8 @@ block content
                           .row.g-0
                             .col-md-8
                               .card-body
-                                h5.card-title #{post.title}
-                                p.card-text #{post.mainText.slice(0, 250) + ' ...'}
+                                h5.card-title #{post.title.replace(/&amp;/g, '&')}
+                                p.card-text #{post.mainText.slice(0, 250).replace(/&amp;/g, '&') + ' ...'}
                                 p.card-text
                                   small.text-body-secondary #{post.publishDate_formatted}
                                 .row
@@ -22,7 +22,7 @@ block content
                                     form(method='POST' action='/post/delete-post/' + post._id)
                                       button.btn.btn.btn-danger.m-2(type='submit') Delete post
                             .col-md-4
-                              img.img-fluid.rounded-start(src=(post.img) alt=(post.img_title) style='object-fit: cover; height: 25vh; max-height: 25vh; width: 100%;')
+                              img.img-fluid.rounded-start(src=(post.img) alt=(post.imgTitle.replace(/&amp;/g, '&')) style='object-fit: cover; height: 25vh; max-height: 25vh; width: 100%;')
             else
                 .row.mt-3
                     .col

@@ -3,20 +3,20 @@ extends layout
 block content
     .container
         .row
-          h2(style='padding: 10px;') #{post.title}
+          h2(style='padding: 10px;') #{post.title.replace(/&amp;/g, '&')}
         if post.subtitle != null
           .row
-            h4(style='padding: 10px;') #{post.subtitle}
+            h4(style='padding: 10px;') #{post.subtitle.replace(/&amp;/g, '&')}
         .row
           p.mb-5.pb-lg-2
             | #{post.publishDate_formatted} - By 
             a(href='#!' style='color: black;') #{post.author.username}
-        div(style='border: 1px blue solid;')
-          p(style='white-space:pre;line-height: 1em;width: fit-content;background-color: #8ca0ff;word-wrap: break-word;width: 90vw;') #{post.mainText}
+        div('display: inline-block;')
+          p(style='white-space:pre;line-height: 1.5rem; word-wrap: break-word;max-width: 75vw;overflow: hidden;white-space: pre-line;') #{(post.mainText).replace(/&amp;/g, '&')}
         figure.figure
-          img.figure-img.img-fluid.rounded(src=(post.img) alt=(post.img_title) style='max-width: \
+          img.figure-img.img-fluid.rounded(src=(post.img) alt=(post.imgTitle.replace(/&amp;/g, '&')) style='max-width: \
           40vw; max-height: 40vh;')
-          figcaption.figure-caption #{post.imgTitle}
+          figcaption.figure-caption #{post.imgTitle.replace(/&amp;/g, '&')}
         hr
         .row
           h4 Comments
