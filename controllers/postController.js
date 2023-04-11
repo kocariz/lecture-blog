@@ -7,7 +7,6 @@ const JsonWebToken = require("jsonwebtoken");
 const comment = require("../models/comment");
 const SECRET_JWT_CODE = "S4rf8tpPsNlxnQWpNFGU_-p-qKKLkyiY9GBeI5KAYHQ";
 const fs = require("fs");
-const { exec } = require('child_process');
 
 exports.posts_list = (req, res, next) => {
   Post.find()
@@ -147,34 +146,14 @@ exports.create_post_post = [
                 post.save((err) => {
                   if (err)
                     next(err);
-                    exec('git add public/', (err, stdout, stderr) => {
+                    exec('ls | grep js', (err, stdout, stderr) => {
                         if (err) {
                             //some err occurred
                             console.error(err)
                         } else {
                             // the *entire* stdout and stderr (buffered)
-                            //console.log(`stdout: ${stdout}`);
-                            //console.log(`stderr: ${stderr}`);
-                        }
-                    });
-                    exec('git commit -m "new file"', (err, stdout, stderr) => {
-                        if (err) {
-                            //some err occurred
-                            console.error(err)
-                        } else {
-                            // the *entire* stdout and stderr (buffered)
-                            //console.log(`stdout: ${stdout}`);
-                            //console.log(`stderr: ${stderr}`);
-                        }
-                    });
-                    exec('git push origin main', (err, stdout, stderr) => {
-                        if (err) {
-                            //some err occurred
-                            console.error(err)
-                        } else {
-                            // the *entire* stdout and stderr (buffered)
-                            //console.log(`stdout: ${stdout}`);
-                            //console.log(`stderr: ${stderr}`);
+                            console.log(`stdout: ${stdout}`);
+                            console.log(`stderr: ${stderr}`);
                         }
                     });
                   res.redirect('/sign/sign-in');
