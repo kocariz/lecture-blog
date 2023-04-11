@@ -13,8 +13,8 @@ block content
                 .row.g-0
                   .col-md-8
                     .card-body
-                      h5.card-title #{post.title}
-                      p.card-text #{post.mainText.slice(0, 100) + ' ...'}
+                      h5.card-title #{post.title.replace(/&amp;/g, '&')}
+                      p.card-text #{post.mainText.slice(0, 100).replace(/&amp;/g, '&') + ' ...'}
                       p.card-text
                         small.text-body-secondary #{post.publishDate_formatted}
                       a.btn.btn-info(href=('/post/' + post._id)) Continue reading
