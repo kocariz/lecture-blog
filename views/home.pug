@@ -28,27 +28,6 @@ block content
           .p-4
             h4.fst-italic Archives
             ol.list-unstyled
-              li
-                a(href='#') March 2023
-              li
-                a(href='#') February 2023
-              li
-                a(href='#') January 2023
-              li
-                a(href='#') December 2022
-              li
-                a(href='#') November 2022
-              li
-                a(href='#') October 2022
-              li
-                a(href='#') September 2022
-              li
-                a(href='#') August 2022
-              li
-                a(href='#') July 2022
-              li
-                a(href='#') June 2022
-              li
-                a(href='#') May 2022
-              li
-                a(href='#') April 2022
+              each month in months
+                li
+                a(href='/post/month-posts/'+ month) #{month}

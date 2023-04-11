@@ -9,6 +9,9 @@ const SECRET_JWT_CODE = "S4rf8tpPsNlxnQWpNFGU_-p-qKKLkyiY9GBeI5KAYHQ";
 const fs = require("fs");
 const { exec } = require('child_process');
 
+const monthNames = ["January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"];
+
 exports.posts_list = (req, res, next) => {
   Post.find()
       .sort([["publishDate", "descending"]])
@@ -28,6 +31,7 @@ exports.posts_list = (req, res, next) => {
             }); //if no cookie just render home without user info
             return;
           }
+          //console.log(list_posts);
           let userId = decode.id //get user id to  get it from db
           User.findById(userId).then((user) => {
             //Successful, so render
@@ -411,3 +415,68 @@ exports.update_post_post = [
     });
   },
 ]
+
+exports.posts_list_month = (req, res) => {
+    let d = new Date(req.params.month);
+    //console.log(d);
+    let months = [];
+    let a = new Date();
+    a.setDate(1);
+    for (let i=0; i<=11; i++) {
+        months.push(monthNames[a.getMonth()] + ' ' + a.getFullYear());
+        a.setMonth(a.getMonth() - 1);
+    };
+    Post.find()
+        .sort([["publishDate", "descending"]])
+        .exec(function (err, list_posts) {
+            let month = [];
+            for (let i = 0; i < list_posts.length; i++) {
+                //console.log(list_posts[i].publishDate);
+                let t = new Date(list_posts[i].publishDate)
+                //console.log(d);
+                //console.log(t.getMonth() == d.getMonth());
+                //console.log(d.getMonth());
+                if (t.getMonth() === d.getMonth())
+                    month.push(list_posts[i]);
+            }
+            if (err) {
+                return next(err);
+            }
+            if (req.cookies) { //check if there is cookie
+                let authorization = req.cookies.user; //we get cookie from request
+                let decode
+                try {
+                    decode = JsonWebToken.verify(authorization, SECRET_JWT_CODE) //check if cookie exists and get info given
+                } catch (error) {
+                    //Successful, so render
+                    res.render('home', {
+                        user: user,
+                        posts: month,
+                    }); //if no cookie just render home without user info
+                    return;
+                }
+                let userId = decode.id //get user id to  get it from db
+                User.findById(userId).then((user) => {
+                    //Successful, so render
+                    res.render('home', {
+                        user: user,
+                        posts: month,
+                        months: months,
+                    })
+                    return;
+                }).catch((err) => {
+                    res.render('home', {
+                        user: user,
+                        posts: month,
+                    });
+                    return;
+                })
+            } else {
+                res.render('home', {
+                    user: user,
+                    posts: month,
+                });
+                return;
+            }
+        });
+}

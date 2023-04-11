@@ -36,4 +36,7 @@ router.get('/update-post/:id', postController.update_post_get);
 //POST request for update post
 router.post('/update-post/:id', upload.single('img_post'), postController.update_post_post);
 
+//GET request for list of posts of month
+router.get('/month-posts/:month', postController.posts_list_month);
+
 module.exports = router;
