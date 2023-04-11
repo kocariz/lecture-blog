@@ -5,7 +5,6 @@ const JsonWebToken = require('jsonwebtoken');
 const Bcrypt = require('bcryptjs');
 const SECRET_JWT_CODE = 'S4rf8tpPsNlxnQWpNFGU_-p-qKKLkyiY9GBeI5KAYHQ';
 
-// Display Sign in form on GET.
 exports.user_signin_get = (req, res, next) => {
   if (req.cookies) {
     //check if there is cookie
@@ -35,7 +34,6 @@ exports.user_signin_get = (req, res, next) => {
   }
 };
 
-// Handle Sign in on POST.
 exports.user_signin_post = [
   // Validate and sanitize fields.
   body('email_singin')
@@ -61,8 +59,6 @@ exports.user_signin_post = [
       });
       return;
     }
-    //console.log(req.body);
-    // Data from form is valid.
     async.parallel(
       {
         user(callback) {
@@ -70,30 +66,26 @@ exports.user_signin_post = [
         },
       },
       (err, results, next) => {
-        if (err) {
-          // Error in API usage.
-          //console.log(err);
+        if (err)
           return next(err);
-        }
         if (results.user == null) {
-          // No results.
+          // No user found so render sign up view
           res.render('sign-up');
           return;
         }
-        if (
-          !Bcrypt.compareSync(req.body.password_singin, results.user.password)
-        ) {
-          res.render('sign-in', {
+        if (!Bcrypt.compareSync(req.body.password_singin, results.user.password)) { //check if password is equal to the one saved on db using Bcrypt
+          res.render('sign-in', { //if error on password rerender sign in page with error message
             user: req.body,
             errors: ['Wrong password'],
           });
         } else {
+          //if password correct create user token using JWT and add it to user cookie
           const token = JsonWebToken.sign(
             { id: results.user._id, email: results.user.email },
             SECRET_JWT_CODE
           );
           res.cookie('user', token, { expire: 360000 + Date.now() }); //cookie expires after 360000 ms from the time it is set.
-          // Successful, so render.
+          // Successful, so redirect to home page
           res.redirect('/');
           return;
         }
@@ -102,7 +94,6 @@ exports.user_signin_post = [
   },
 ];
 
-// Display Sign up form on GET.
 exports.user_signup_get = (req, res, next) => {
   if (req.cookies) {
     //check if there is cookie
@@ -115,6 +106,7 @@ exports.user_signup_get = (req, res, next) => {
       return;
     }
     let userId = decode.id; //get user id to  get it from db
+    //get user, if so render home page
     User.findById(userId)
       .then((user) => {
         res.render('home', {
@@ -132,7 +124,6 @@ exports.user_signup_get = (req, res, next) => {
   }
 };
 
-// Handle Sign up on POST.
 exports.user_signup_post = [
   // Validate and sanitize fields.
   body('username')
@@ -160,7 +151,6 @@ exports.user_signup_post = [
     .isLength({ min: 1 })
     .escape()
     .withMessage('Confirm password must be specified.'),
-  // Process request after validation and sanitization.
   (req, res, next) => {
     // Extract the validation errors from a request.
     const errors = validationResult(req);
@@ -173,46 +163,45 @@ exports.user_signup_post = [
       });
       return;
     }
-    if (req.body.email !== req.body.confirmEmail) {
+    if (req.body.email !== req.body.confirmEmail) { //check if both emails proportioned are the same.
       res.render('sign-up', {
         user: req.body,
         errors: ['email is not the same as the confirm one'],
       });
       return;
     }
-    if (req.body.password !== req.body.confirmPassword) {
+    if (req.body.password !== req.body.confirmPassword) { //check if both passwords proportioned are the same
       res.render('sign-up', {
         user: req.body,
         errors: ['password is not the same as the confirm one'],
       });
       return;
     }
-    // Data from form is valid.
 
-    // Create an Author object with escaped and trimmed data.
+    //Create user with info received, and has password to store on db
     const user = new User({
       username: req.body.username,
       email: req.body.email,
       password: Bcrypt.hashSync(req.body.password, 10),
     });
     user.save((err) => {
-      if (err) {
+      //save new user on db
+      if (err)
         next(err);
-      }
-      // Successful - redirect to new author record.
+      //create and store new token of user in cookie
       const token = JsonWebToken.sign(
         { id: user._id, email: user.email },
         SECRET_JWT_CODE
       );
       res.cookie('user', token, { expire: 360000 + Date.now() }); //cookie expires after 360000 ms from the time it is set.
-      // Successful, so render.
+      // Successful, so redirect to home page
       res.redirect('/');
       return;
     });
   },
 ];
 
-//Deletes  user cookie and dislays home img
+//Deletes  user cookie and displays home view
 exports.user_signout = (req, res, next) => {
   res.clearCookie('user');
   res.redirect('/');

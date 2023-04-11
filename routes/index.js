@@ -12,6 +12,7 @@ const monthNames = ["January", "February", "March", "April", "May", "June",
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  //get an array with a list of the last 12 months
   let months = [];
   let d = new Date();
   d.setDate(1);
@@ -19,6 +20,8 @@ router.get('/', function(req, res, next) {
     months.push(monthNames[d.getMonth()] + ' ' + d.getFullYear());
     d.setMonth(d.getMonth() - 1);
   };
+
+  //get all posts and sort them by publishDate
   Post.find().sort([["publishDate", "descending"]]).then((posts) =>  {
     if (req.cookies) { //check if there is cookie
       let authorization = req.cookies.user; //we get cookie from request
@@ -33,8 +36,9 @@ router.get('/', function(req, res, next) {
         return;
       }
       let userId = decode.id //get user id to  get it from db
-      //console.log(months);
+      //get user from token from cookie
       User.findById(userId).then((user) => {
+        //render home view with info received
         res.render('home', {
           user: user,
           posts: posts.slice(0, 10),

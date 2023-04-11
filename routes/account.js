@@ -3,7 +3,7 @@ const accountController = require('../controllers/accountController');
 const { route } = require('.');
 var router = express.Router();
   
-//COMMENT ROUTES
+//ACCOUNT ROUTES
 
 //GET request for getting general user info
 router.get('/info', accountController.account_info);
