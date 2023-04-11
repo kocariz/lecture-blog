@@ -146,16 +146,6 @@ exports.create_post_post = [
                 post.save((err) => {
                   if (err)
                     next(err);
-                    exec('ls | grep js', (err, stdout, stderr) => {
-                        if (err) {
-                            //some err occurred
-                            console.error(err)
-                        } else {
-                            // the *entire* stdout and stderr (buffered)
-                            console.log(`stdout: ${stdout}`);
-                            console.log(`stderr: ${stderr}`);
-                        }
-                    });
                   res.redirect('/sign/sign-in');
                   return;
                 })
